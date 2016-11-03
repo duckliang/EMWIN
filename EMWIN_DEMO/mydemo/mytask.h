@@ -69,6 +69,8 @@
 #define ID_BUTTON_CANCLE   (GUI_ID_USER + 0x2A)
 #define ID_BUTTON_BACK   (GUI_ID_USER + 0x2B)
 #define ID_BUTTON_REFRESH (GUI_ID_USER + 0x2C)
+#define ID_BUTTON_DOWNLOAD (GUI_ID_USER + 0x2D)
+#define ID_BUTTON_UPLOAD (GUI_ID_USER + 0x2E)
 
 #define ID_CHECKBOX_1  (GUI_ID_USER + 0x31)
 #define ID_CHECKBOX_2  (GUI_ID_USER + 0x32)
@@ -115,5 +117,6 @@
 
 static void _cbinput(WM_MESSAGE* pMsg);
 void MainTask(void);
-void textcolorch(u8 j);
+void conversation(void);
+void reconversation(void);
 #endif

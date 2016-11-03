@@ -6,16 +6,16 @@
 #include "ILI93xx.h"
 #include "usart.h"	 
 #include "24cxx.h"
-#include "flash.h"
+//#include "flash.h"
 #include "touch.h"
-#include "sram.h"
+//#include "sram.h"
 #include "timer.h"
-#include "sdio_sdcard.h"
+//#include "sdio_sdcard.h"
 #include "malloc.h"
 #include "GUI.h"
-#include "ff.h"
-#include "exfuns.h"
-#include "w25qxx.h"
+//#include "ff.h"
+//#include "exfuns.h"
+//#include "w25qxx.h"
 #include "includes.h"
 #include "WM.h"
 #include "DIALOG.h"
@@ -88,6 +88,7 @@ int main(void)
 	BEEP_Init();			//初始化蜂鸣器
 	GPIO_INPUT_CONFIG();
 	GPIO_OUTPUT_CONFIG();
+	AT24CXX_Init();
 //	FSMC_SRAM_Init();		//初始化SRAM
 //	my_mem_init(SRAMIN); 	//初始化内部内存池
 //	my_mem_init(SRAMEX);  	//初始化外部内存池

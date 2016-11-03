@@ -11,12 +11,14 @@ static WM_HWIN    _hLastFrame;
 
 volatile u8 getstate[40][40];
 volatile u8 savestate[40][40];
+volatile u8 conver[40][5];
+volatile u8 reconv[40][5];
 volatile u8 state_in;
 
 
-const u8 TEXT_Buffer[]={"STM32F103 FLASH TEST"};
-#define SIZE sizeof(TEXT_Buffer)		//Êý×é³¤¶È
-#define FLASH_SAVE_ADDR  0X0807F800		//ÉèÖÃFLASH ±£´æµØÖ·(±ØÐëÎªÅ¼Êý£¬ÇÒÆäÖµÒª´óÓÚ±¾´úÂëËùÕ¼ÓÃFLASHµÄ´óÐ¡+0X08000000)
+const u8 TEXT_Buffer[8]={1,2,3,4,5,6,7,8};
+#define SIZE sizeof(conver)		
+#define FLASH_SAVE_ADDR  0X08070000		
 	u8 key;
 	u16 i=0;
 	u8 datatemp[SIZE];
@@ -208,6 +210,7 @@ static void _cboutput(WM_MESSAGE* pMsg)
 		_CreateButton(hWin, "OK", ID_BUTTON_OK, 100, 440, 100, 40, 0);
 		_CreateButton(hWin, "REFRESH", ID_BUTTON_CANCLE, 600, 440, 120, 40, 0);
 		_CreateButton(hWin, "BACK", ID_BUTTON_BACK, 350, 440, 100, 40, 0);
+		
 		break;
 		
 		case WM_PAINT:
@@ -402,6 +405,8 @@ static void _cbinput(WM_MESSAGE* pMsg)
 			/* 设置聚焦 */
 			WM_SetFocus(hWin);
  _CreateButton(hWin, "REFRESH", ID_BUTTON_REFRESH, 340, 150, 120, 40, GUI_BLUE);
+ _CreateButton(hWin, "DOWNLOAD", ID_BUTTON_DOWNLOAD, 340, 250, 120, 40, GUI_BLUE);
+ _CreateButton(hWin, "UPLOAD", ID_BUTTON_UPLOAD, 340, 350, 120, 40, GUI_BLUE);
 		_CreateButton(hWin, "1", ID_BUTTON_1, 000, 0, 80, 40, buttoncol[0]);
 		_CreateButton(hWin, "2", ID_BUTTON_2, 100, 0, 80, 40, buttoncol[1]);
 		_CreateButton(hWin, "3", ID_BUTTON_3, 200, 0, 80, 40, buttoncol[2]);
@@ -512,6 +517,8 @@ static void _cbinput(WM_MESSAGE* pMsg)
 				switch (Id) 
 				{				
 					case ID_BUTTON_REFRESH: _DeleteFrame(); _CreateFrame(0,0,800,480,&_cbinput);BEEP=0; break;
+					case ID_BUTTON_DOWNLOAD:conversation(); STMFLASH_Write(FLASH_SAVE_ADDR,(u16*)conver,SIZE/2);break;
+					case ID_BUTTON_UPLOAD: STMFLASH_Read(FLASH_SAVE_ADDR,(u16*)reconv,SIZE/2); reconversation();	break;
           //BUTTON开始					
 					case ID_BUTTON_1: state_in=0; _DeleteFrame();_CreateFrame(0,0,800,480,&_cboutput);  break;									
 					case ID_BUTTON_2: state_in=1; _DeleteFrame();_CreateFrame(0,0,800,480,&_cboutput);  break;									
@@ -577,6 +584,8 @@ static void _cbinput(WM_MESSAGE* pMsg)
 */
 void MainTask(void) 
 {
+		OS_ERR err;
+	CPU_SR_ALLOC();
 	GUI_Init();
 	
 	/* 使能窗口使用内存设备 */
@@ -603,34 +612,62 @@ void MainTask(void)
 	/* 使能UTF8解码 */
 //	GUI_UC_SetEncodeUTF8();
 	while(1)
-	{checkout();
-		key=KEY_Scan(0);
+	{
+				key=KEY_Scan(0);
+
 		if(key==KEY0_PRES)	//KEY0°´ÏÂ,¶ÁÈ¡×Ö·û´®²¢ÏÔÊ¾
 		{
+			OS_CRITICAL_ENTER();
 // 			printf("Start Read FLASH.... ");
-//			STMFLASH_Read(FLASH_SAVE_ADDR,(u16*)datatemp,SIZE);
+			STMFLASH_Read(FLASH_SAVE_ADDR,(u16*)reconv,SIZE/2);
 //			printf("The Data Readed Is:  ");//ÌáÊ¾´«ËÍÍê³É
-//			printf("%s",datatemp);//ÏÔÊ¾¶Áµ½µÄ×Ö·û´®
-//				WM_SendMessageNoPara(_xlashframe,WM_RECOLOR);
-//			WM_BroadcastMessage();
-					GUI_SendKeyMsg(GUI_KEY_RIGHT, 1);
-					LED1 = !LED1;
+			printf("%s",&reconv[0][0]);//ÏÔÊ¾¶Áµ½µÄ×Ö·û´®
+			OS_CRITICAL_EXIT();
 		}	 
 		if(key==KEY1_PRES)	//KEY1°´ÏÂ,Ð´ÈëSTM32 FLASH
 		{ 
-			GUI_SetColor(GUI_RED); GUI_DispStringAt("4",100,50);
-//		            GUI_SendKeyMsg(GUI_KEY_RIGHT, 1);
-//						GUI_SendKeyMsg(GUI_KEY_LEFT, 1);
+					OS_CRITICAL_ENTER();
 // 			printf("Start Write FLASH....");
-//			STMFLASH_Write(FLASH_SAVE_ADDR,(u16*)TEXT_Buffer,SIZE);
+			STMFLASH_Write(FLASH_SAVE_ADDR,(u16*)conver,SIZE/2);
 //			printf("FLASH Write Finished!");//ÌáÊ¾´«ËÍÍê³É
+						OS_CRITICAL_EXIT();
 		}		
-		GUI_Delay(10);
+		if(key==WKUP_PRES)
+		{
+			printf("%d\n",conver[2][0]);
+			printf("%d\n",conver[2][1]);
+			printf("%d\n",conver[2][2]);
+			printf("%d\n",conver[2][3]);
+			printf("%d\n",conver[2][4]);
+		}
+		LED0 = !LED0;
+		GUI_Delay(100);
 	}
 }
-void textcolorch(u8 j)
-{ char  array[2];
-	GUI_SetColor(GUI_RED);
-	GUI_DispStringAt("1",50,0);    
+void conversation(void)
+{
+	u8 i,j;
+	for(j=0;j<40;j++){
+	for(i=0;i<5;i++){
+	conver[j][i]=(savestate[j][8*i])|(savestate[j][8*i+1]<<1)|(savestate[j][8*i+2]<<2)|(savestate[j][8*i+3]<<3)|(savestate[j][8*i+4]<<4)|(savestate[j][8*i+5]<<5)|(savestate[j][8*i+6]<<6)|(savestate[j][8*i+7]<<7);
+	}
+}
+}
+void reconversation(void)
+{
+	u8 i,j;
+	for(j=0;j<40;j++){
+	for(i=0;i<5;i++){
+	savestate[j][8*i]=(reconv[j][i])&0x01;
+	savestate[j][8*i+1]=(reconv[j][i]&0x02)>>1;
+	savestate[j][8*i+2]=(reconv[j][i]&0x04)>>2;
+	savestate[j][8*i+3]=(reconv[j][i]&0x08)>>3;
+	savestate[j][8*i+4]=(reconv[j][i]&0x10)>>4;
+	savestate[j][8*i+5]=(reconv[j][i]&0x20)>>5;
+	savestate[j][8*i+6]=(reconv[j][i]&0x40)>>6;		
+	savestate[j][8*i+7]=(reconv[j][i]&0x80)>>7;		
+
+	}
+}
 }
 

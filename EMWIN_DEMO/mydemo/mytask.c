@@ -634,11 +634,11 @@ void MainTask(void)
 		}		
 		if(key==WKUP_PRES)
 		{
-			printf("%d\n",conver[2][0]);
-			printf("%d\n",conver[2][1]);
-			printf("%d\n",conver[2][2]);
-			printf("%d\n",conver[2][3]);
-			printf("%d\n",conver[2][4]);
+while(1)
+{
+  checkout();
+	GUI_Delay(100);
+}
 		}
 		LED0 = !LED0;
 		GUI_Delay(100);

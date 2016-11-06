@@ -1,12 +1,8 @@
 #include "mytask.h"
 #include "includes.h"
-#include "led.h"
-#include "key.h"
 #include "stmflash.h"
 #include "checkout.h"
 #include "string.h"
-//#include "GUI.h"
-//#include "WM.h"
 static WM_HWIN    _hLastFrame;
 
 volatile u8 getstate[40][40];
@@ -459,47 +455,7 @@ static void _cbinput(WM_MESSAGE* pMsg)
 				case GUI_KEY_PGUP:
 					{
 					_DeleteFrame();
-					_CreateFrame(0,0,800,480,&_cbinput);
-//						if(x_button==0){_CreateButton(hWin, "1", ID_BUTTON_1, 000, 0, 80, 40, GUI_RED);}
-//						if(x_button==1){_CreateButton(hWin, "2", ID_BUTTON_2, 100, 0, 80, 40, GUI_RED);}
-//						if(x_button==2){_CreateButton(hWin, "3", ID_BUTTON_3, 200, 0, 80, 40, GUI_RED);}
-//						if(x_button==3){_CreateButton(hWin, "4", ID_BUTTON_4, 300, 0, 80, 40, GUI_RED);}
-//						if(x_button==4){_CreateButton(hWin, "5", ID_BUTTON_5, 400, 0, 80, 40, GUI_RED);}
-//						if(x_button==5){_CreateButton(hWin, "6", ID_BUTTON_6, 500, 0, 80, 40, GUI_RED);}
-//						if(x_button==6){_CreateButton(hWin, "7", ID_BUTTON_7, 600, 0, 80, 40, GUI_RED);}
-//						if(x_button==7){_CreateButton(hWin, "8", ID_BUTTON_8, 700, 0, 80, 40, GUI_RED);}
-//						if(x_button==8){_CreateButton(hWin, "9", ID_BUTTON_9,  000, 100, 80, 40, GUI_RED);}
-//						if(x_button==9){_CreateButton(hWin, "10", ID_BUTTON_10, 100, 100, 80, 40, GUI_RED);}
-//						if(x_button==10){_CreateButton(hWin, "11", ID_BUTTON_11, 200, 100, 80, 40, GUI_RED);}
-//						if(x_button==11){_CreateButton(hWin, "12", ID_BUTTON_12, 300, 100, 80, 40, GUI_RED);}
-//						if(x_button==12){_CreateButton(hWin, "13", ID_BUTTON_13, 400, 100, 80, 40, GUI_RED);}
-//						if(x_button==13){_CreateButton(hWin, "14", ID_BUTTON_14, 500, 100, 80, 40, GUI_RED);}
-//						if(x_button==14){_CreateButton(hWin, "15", ID_BUTTON_15, 600, 100, 80, 40, GUI_RED);}
-//						if(x_button==15){_CreateButton(hWin, "16", ID_BUTTON_16, 700, 100, 80, 40, GUI_RED);}
-//						if(x_button==16){_CreateButton(hWin, "17", ID_BUTTON_17, 000, 200, 80, 40, GUI_RED);}
-//						if(x_button==17){_CreateButton(hWin, "18", ID_BUTTON_18, 100, 200, 80, 40, GUI_RED);}
-//						if(x_button==18){_CreateButton(hWin, "19", ID_BUTTON_19, 200, 200, 80, 40, GUI_RED);}
-//						if(x_button==19){_CreateButton(hWin, "20", ID_BUTTON_20, 300, 200, 80, 40, GUI_RED);}
-//						if(x_button==20){_CreateButton(hWin, "21", ID_BUTTON_21, 400, 200, 80, 40, GUI_RED);}
-//						if(x_button==21){_CreateButton(hWin, "22", ID_BUTTON_22, 500, 200, 80, 40, GUI_RED);}
-//						if(x_button==22){_CreateButton(hWin, "23", ID_BUTTON_23, 600, 200, 80, 40, GUI_RED);}
-//						if(x_button==23){_CreateButton(hWin, "24", ID_BUTTON_24, 700, 200, 80, 40, GUI_RED);}
-//						if(x_button==24){_CreateButton(hWin, "25", ID_BUTTON_25, 000, 300, 80, 40, GUI_RED);}
-//						if(x_button==25){_CreateButton(hWin, "26", ID_BUTTON_26, 100, 300, 80, 40, GUI_RED);}
-//						if(x_button==26){_CreateButton(hWin, "27", ID_BUTTON_27, 200, 300, 80, 40, GUI_RED);}
-//						if(x_button==27){_CreateButton(hWin, "28", ID_BUTTON_28, 300, 300, 80, 40, GUI_RED);}
-//						if(x_button==28){_CreateButton(hWin, "29", ID_BUTTON_29, 400, 300, 80, 40, GUI_RED);}
-//						if(x_button==29){_CreateButton(hWin, "30", ID_BUTTON_30, 500, 300, 80, 40, GUI_RED);}		
-//						if(x_button==30){_CreateButton(hWin, "31", ID_BUTTON_31, 600, 300, 80, 40, GUI_RED);}
-//						if(x_button==31){_CreateButton(hWin, "32", ID_BUTTON_32, 700, 300, 80, 40, GUI_RED);}
-//						if(x_button==32){_CreateButton(hWin, "33", ID_BUTTON_33, 000, 400, 80, 40, GUI_RED);}
-//						if(x_button==33){_CreateButton(hWin, "34", ID_BUTTON_34, 100, 400, 80, 40, GUI_RED);}
-//						if(x_button==34){_CreateButton(hWin, "35", ID_BUTTON_35, 200, 400, 80, 40, GUI_RED);}
-//						if(x_button==35){_CreateButton(hWin, "36", ID_BUTTON_36, 300, 400, 80, 40, GUI_RED);}
-//						if(x_button==36){_CreateButton(hWin, "37", ID_BUTTON_37, 400, 400, 80, 40, GUI_RED);}
-//						if(x_button==37){_CreateButton(hWin, "38", ID_BUTTON_38, 500, 400, 80, 40, GUI_RED);}
-//						if(x_button==38){_CreateButton(hWin, "39", ID_BUTTON_39, 600, 400, 80, 40, GUI_RED);}
-//						if(x_button==39){_CreateButton(hWin, "40", ID_BUTTON_40, 700, 400, 80, 40, GUI_RED);}						
+					_CreateFrame(0,0,800,480,&_cbinput);					
 					}
 				break;
 		  	}

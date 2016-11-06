@@ -1,21 +1,12 @@
-#include "led.h"
 #include "beep.h"
 #include "delay.h"
-#include "key.h"
 #include "sys.h"
 #include "ILI93xx.h"
 #include "usart.h"	 
-#include "24cxx.h"
-//#include "flash.h"
 #include "touch.h"
-//#include "sram.h"
 #include "timer.h"
-//#include "sdio_sdcard.h"
 #include "malloc.h"
 #include "GUI.h"
-//#include "ff.h"
-//#include "exfuns.h"
-//#include "w25qxx.h"
 #include "includes.h"
 #include "WM.h"
 #include "DIALOG.h"
@@ -52,15 +43,15 @@ void touch_task(void *p_arg);
 
 //LED0任务
 //设置任务优先级
-#define LED0_TASK_PRIO 				5
-//任务堆栈大小
-#define LED0_STK_SIZE				128
-//任务控制块
-OS_TCB Led0TaskTCB;
-//任务堆栈
-CPU_STK LED0_TASK_STK[LED0_STK_SIZE];
-//led0任务
-void led0_task(void *p_arg);
+//#define LED0_TASK_PRIO 				5
+////任务堆栈大小
+//#define LED0_STK_SIZE				128
+////任务控制块
+//OS_TCB Led0TaskTCB;
+////任务堆栈
+//CPU_STK LED0_TASK_STK[LED0_STK_SIZE];
+////led0任务
+//void led0_task(void *p_arg);
 
 //EMWINDEMO任务
 //设置任务优先级
@@ -82,20 +73,11 @@ int main(void)
 	delay_init();	    	//延时函数初始化	  
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 	//设置NVIC中断分组2:2位抢占优先级，2位响应优先级
 	uart_init(115200);	 	//串口初始化为115200
- 	LED_Init();			    //LED端口初始化
 	TFTLCD_Init();			//LCD初始化	
-	KEY_Init();	 			//按键初始化
 	BEEP_Init();			//初始化蜂鸣器
 	GPIO_INPUT_CONFIG();
 	GPIO_OUTPUT_CONFIG();
-	AT24CXX_Init();
-//	FSMC_SRAM_Init();		//初始化SRAM
-//	my_mem_init(SRAMIN); 	//初始化内部内存池
-//	my_mem_init(SRAMEX);  	//初始化外部内存池
-	
-//	exfuns_init();			//为fatfs文件系统分配内存
-//	f_mount(fs[0],"0:",1);	//挂载SD卡
-//	f_mount(fs[1],"1:",1);	//挂载FLASH
+
 	TP_Init();				//触摸屏初始化
 	
 	OSInit(&err);			//初始化UCOSIII
@@ -172,20 +154,7 @@ void start_task(void *p_arg)
                  (void*       )0,					
                  (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
                  (OS_ERR*     )&err);			 
-	//LED0任务
-	OSTaskCreate((OS_TCB*     )&Led0TaskTCB,		
-				 (CPU_CHAR*   )"Led0 task", 		
-                 (OS_TASK_PTR )led0_task, 			
-                 (void*       )0,					
-                 (OS_PRIO	  )LED0_TASK_PRIO,     
-                 (CPU_STK*    )&LED0_TASK_STK[0],	
-                 (CPU_STK_SIZE)LED0_STK_SIZE/10,	
-                 (CPU_STK_SIZE)LED0_STK_SIZE,		
-                 (OS_MSG_QTY  )0,					
-                 (OS_TICK	  )0,  					
-                 (void*       )0,					
-                 (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
-                 (OS_ERR*     )&err);
+
 	OS_TaskSuspend((OS_TCB*)&StartTaskTCB,&err);		//挂起开始任务			 
 	OS_CRITICAL_EXIT();	//退出临界区
 }
@@ -194,28 +163,10 @@ void start_task(void *p_arg)
 void emwindemo_task(void *p_arg)
 {
 	GUI_CURSOR_Show();
-//	//更换皮肤
-//	BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX); 
-//	CHECKBOX_SetDefaultSkin(CHECKBOX_SKIN_FLEX);
-//	DROPDOWN_SetDefaultSkin(DROPDOWN_SKIN_FLEX);
-//	FRAMEWIN_SetDefaultSkin(FRAMEWIN_SKIN_FLEX);
-//	HEADER_SetDefaultSkin(HEADER_SKIN_FLEX);
-//	MENU_SetDefaultSkin(MENU_SKIN_FLEX);
-//	MULTIPAGE_SetDefaultSkin(MULTIPAGE_SKIN_FLEX);
-//	PROGBAR_SetDefaultSkin(PROGBAR_SKIN_FLEX);
-//	RADIO_SetDefaultSkin(RADIO_SKIN_FLEX);
-//	SCROLLBAR_SetDefaultSkin(SCROLLBAR_SKIN_FLEX);
-//	SLIDER_SetDefaultSkin(SLIDER_SKIN_FLEX);
-//	SPINBOX_SetDefaultSkin(SPINBOX_SKIN_FLEX);
-//	CreateWindow2();
-//	CreateFramewin1();
-//	while(1)
-//	{
-//		GUI_Delay(100); 
-//	}
+
 	while(1)
 	{
-//		Buttonbmp_Demo();
+
 		MainTask();
 	}
 }
@@ -231,40 +182,3 @@ void touch_task(void *p_arg)
 	}
 }
 
-//LED0任务
-void led0_task(void *p_arg)
-{	u8 key;
-	u16 i=0;
-//	u8 datatemp[SIZE];
-	OS_ERR err;
-	CPU_SR_ALLOC();
-		while(1)
-	{
-		
-		key=KEY_Scan(0);
-
-		if(key==KEY0_PRES)	//KEY0按下,读取字符串并显示
-		{
-////			OS_CRITICAL_ENTER();
-// 			printf("Start Read FLASH.... ");
-//			STMFLASH_Read(FLASH_SAVE_ADDR,(u16*)datatemp,SIZE);
-//			printf("The Data Readed Is:  ");//提示传送完成
-//			printf("%s",datatemp);//显示读到的字符串
-////			OS_CRITICAL_EXIT();
-		}	 
-		if(key==KEY1_PRES)	//KEY1按下,写入STM32 FLASH
-		{ 
-//		
-// 			printf("Start Write FLASH....");
-//			STMFLASH_Write(FLASH_SAVE_ADDR,(u16*)TEXT_Buffer,SIZE);
-//			printf("FLASH Write Finished!");//提示传送完成
-		}		
-		LED0 = !LED0;
-//		for(i=0;i<40;i++)
-//		{
-//			printf("%o\n",getstate[0][i]);
-//		}
-		OSTimeDlyHMSM(0,0,0,500,OS_OPT_TIME_PERIODIC,&err);//延时500ms
-	}
-
-}

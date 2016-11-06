@@ -206,7 +206,6 @@ void checkout(void)
 		for(j=0;j<40;j++){
 			if(savestate[i][j]==1)
 			{		
-//					RecoverOutput[j]();
 					WriteOutput[j]();
 					if(ReadInput[i]()==1){
 						BEEP=1;
@@ -218,13 +217,9 @@ void checkout(void)
 						GUI_SendKeyMsg(GUI_KEY_PGDOWN, 1);
 					}
 					else{
-//						BEEP=0;
 						buttoncol[i]=GUI_BLACK;
-						checkcol[j]=GUI_BLUE;						            
-//						GUI_SendKeyMsg(GUI_KEY_UP, 1);
-//						GUI_SendKeyMsg(GUI_KEY_DOWN, 1);								
+						checkcol[j]=GUI_BLUE;						            							
 					}
-//					WriteOutput[j]();
 					RecoverOutput[j]();
 			}
 			

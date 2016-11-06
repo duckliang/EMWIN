@@ -3,7 +3,7 @@
 #include "delay.h"
 #include "stdlib.h"
 #include "math.h"
-#include "24cxx.h" 
+//#include "24cxx.h" 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -219,8 +219,8 @@ u8 TP_Scan(u8 tp)
 //保存校准参数										    
 void TP_Save_Adjdata(void)
 {
-	AT24CXX_Write(SAVE_ADDR_BASE,(u8*)&tp_dev.xfac,14);	//强制保存&tp_dev.xfac地址开始的14个字节数据，即保存到tp_dev.touchtype
- 	AT24CXX_WriteOneByte(SAVE_ADDR_BASE+14,0X0A);		//在最后，写0X0A标记校准过了
+//	AT24CXX_Write(SAVE_ADDR_BASE,(u8*)&tp_dev.xfac,14);	//强制保存&tp_dev.xfac地址开始的14个字节数据，即保存到tp_dev.touchtype
+// 	AT24CXX_WriteOneByte(SAVE_ADDR_BASE+14,0X0A);		//在最后，写0X0A标记校准过了
 }
 //得到保存在EEPROM里面的校准值
 //返回值：1，成功获取数据
@@ -228,10 +228,10 @@ void TP_Save_Adjdata(void)
 u8 TP_Get_Adjdata(void)
 {					  
 	u8 temp;
-	temp=AT24CXX_ReadOneByte(SAVE_ADDR_BASE+14);//读取标记字,看是否校准过！ 		 
+//	temp=AT24CXX_ReadOneByte(SAVE_ADDR_BASE+14);//读取标记字,看是否校准过！ 		 
 	if(temp==0X0A)//触摸屏已经校准过了			   
  	{ 
-		AT24CXX_Read(SAVE_ADDR_BASE,(u8*)&tp_dev.xfac,14);//读取之前保存的校准数据 
+//		AT24CXX_Read(SAVE_ADDR_BASE,(u8*)&tp_dev.xfac,14);//读取之前保存的校准数据 
 		if(tp_dev.touchtype)//X,Y方向与屏幕相反
 		{
 			CMD_RDX=0X90;
@@ -482,7 +482,7 @@ u8 TP_Init(void)
 	 	GPIO_SetBits(GPIOF,GPIO_Pin_10);//上拉		
  
 		TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]);//第一次读取初始化	 
-		AT24CXX_Init();			//初始化24CXX
+//		AT24CXX_Init();			//初始化24CXX
 		if(TP_Get_Adjdata())return 0;//已经校准
 		else			  		//未校准?
 		{ 										    

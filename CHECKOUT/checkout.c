@@ -208,7 +208,7 @@ void checkout(void)
 			{		
 //					RecoverOutput[j]();
 					WriteOutput[j]();
-					if(ReadInput[i]()==0){
+					if(ReadInput[i]()==1){
 						BEEP=1;
 						y_check=j;
 						x_button=i;

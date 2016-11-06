@@ -613,34 +613,8 @@ void MainTask(void)
 //	GUI_UC_SetEncodeUTF8();
 	while(1)
 	{
-				key=KEY_Scan(0);
-
-		if(key==KEY0_PRES)	//KEY0°´ÏÂ,¶ÁÈ¡×Ö·û´®²¢ÏÔÊ¾
-		{
-			OS_CRITICAL_ENTER();
-// 			printf("Start Read FLASH.... ");
-			STMFLASH_Read(FLASH_SAVE_ADDR,(u16*)reconv,SIZE/2);
-//			printf("The Data Readed Is:  ");//ÌáÊ¾´«ËÍÍê³É
-			printf("%s",&reconv[0][0]);//ÏÔÊ¾¶Áµ½µÄ×Ö·û´®
-			OS_CRITICAL_EXIT();
-		}	 
-		if(key==KEY1_PRES)	//KEY1°´ÏÂ,Ð´ÈëSTM32 FLASH
-		{ 
-					OS_CRITICAL_ENTER();
-// 			printf("Start Write FLASH....");
-			STMFLASH_Write(FLASH_SAVE_ADDR,(u16*)conver,SIZE/2);
-//			printf("FLASH Write Finished!");//ÌáÊ¾´«ËÍÍê³É
-						OS_CRITICAL_EXIT();
-		}		
-		if(key==WKUP_PRES)
-		{
-while(1)
-{
-  checkout();
-	GUI_Delay(100);
-}
-		}
-		LED0 = !LED0;
+	
+		 checkout();
 		GUI_Delay(100);
 	}
 }
